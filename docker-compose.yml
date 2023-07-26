@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  auth-app:
+    build:
+      context: .
+      dockerfile: ./build/Dockerfile.build
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./earnaha:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
