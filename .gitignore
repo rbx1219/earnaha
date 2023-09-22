@@ -1,0 +1,6 @@
+service.json
+.env
+.env.product
+node_modules
+.secrets
+k8s/nginx/etc/cert
