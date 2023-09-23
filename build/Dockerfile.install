@@ -1,0 +1,23 @@
+FROM node:18.17-alpine AS builder
+
+WORKDIR /usr/src/app
+
+COPY earnaha/package*.json ./
+
+RUN npm install
+
+COPY earnaha .
+
+RUN npm run build
+
+FROM node:18.17-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/package*.json ./
+RUN npm install --production
+
+COPY --from=builder /usr/src/app/dist ./dist
+
+CMD ["node", "dist/main"]
+
