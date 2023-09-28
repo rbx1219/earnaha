@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-app
+  template:
+    metadata:
+      labels:
+        app: auth-app
+    spec:
+      containers:
+      - name: auth-app
+        image: aha-backend:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: auth-app-config
+          mountPath: /usr/src/app/.env
+          subPath: .env
+      volumes:
+      - name: auth-app-config
+        secret:
+          secretName: auth-app-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-app
+spec:
+  selector:
+    app: auth-app
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000

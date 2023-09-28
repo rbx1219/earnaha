@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ahadb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ahadb
+  template:
+    metadata:
+      labels:
+        app: ahadb
+    spec:
+      containers:
+      - name: ahadb
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: ahadb-secret
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: ahadb-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ahadb-secret
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pg-data-volume
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: init-scripts-volume
+      volumes:
+      - name: pg-data-volume
+        persistentVolumeClaim:
+          claimName: pg-data-pvc
+      - name: init-scripts-volume
+        configMap:
+          name: ahadb-init-scripts
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ahadb
+spec:
+  selector:
+    app: ahadb
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 5Gi
