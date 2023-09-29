@@ -8,9 +8,9 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ErrorCode } from 'src/exceptions/error-code.enum';
-import { CustomExceptionFilter } from 'src/exceptions/filters/custom-exception.filter';
-import { AhaGetUser, AhaSuccess } from 'src/shared/response/success.decorator';
+import { ErrorCode } from '../exceptions/error-code.enum';
+import { CustomExceptionFilter } from '../exceptions/filters/custom-exception.filter';
+import { AhaGetUser, AhaSuccess } from '../shared/response/success.decorator';
 import * as UE from '../exceptions/exceptions/user-exception';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UserService } from './user.service';

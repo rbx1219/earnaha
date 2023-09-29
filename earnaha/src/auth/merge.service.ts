@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import * as UE from '../exceptions/exceptions/user-exception';
 import { RedisService } from '../redis/redis.service';

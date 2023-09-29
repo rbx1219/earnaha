@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { CONSTANTS } from 'src/shared/constants';
-import { UserService } from 'src/user/user.service';
+import { CONSTANTS } from '../shared/constants';
+import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import * as UE from '../exceptions/exceptions/user-exception';
