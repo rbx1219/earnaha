@@ -5,7 +5,7 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   AhaDashboardStatResp,
   AhaDashboardUsersResp,
-} from 'src/shared/response/success.decorator';
+} from '../shared/response/success.decorator';
 import { UserService } from '../user/user.service';
 import { StatisticsService } from './statistics.service';
 

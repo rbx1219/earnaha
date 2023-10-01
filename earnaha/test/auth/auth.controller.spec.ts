@@ -163,19 +163,16 @@ describe('AuthController', () => {
       .send(mockLoginDto)
       .expect(401);
 
-    // You can further assert that the error message or type is correct based on how
-    // UserAuthenticationException structures its response.
     expect(response.body.message).toEqual('Invalid email or password.'); // Adjust the expected message based on your implementation.
   });
 
   it('should logout the user and clear the SESSIONID cookie', async () => {
-    // 假設在 req.cookies 中有一個 SESSIONID
     const mockCookie = 'some-session-id';
 
     const response = await request(app.getHttpServer())
       .get('/auth/logout')
       .set('Cookie', [`SESSIONID=${mockCookie}`])
-      .expect(302); // 假設您的 logout 方法將重定向到主頁
+      .expect(302);
 
     expect(response.get('Set-Cookie')).toEqual(
       expect.arrayContaining([expect.stringContaining('SESSIONID=;')]),
@@ -297,7 +294,6 @@ describe('AuthController', () => {
 
   describe('resendVerification', () => {
     it('should resend the verification email based on userId and return success', async () => {
-      // 假設一個模擬的 userId
       const mockUserId = 123;
 
       const mockAuthService =

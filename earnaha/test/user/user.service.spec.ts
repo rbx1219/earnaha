@@ -41,7 +41,6 @@ describe('UserService', () => {
       findAndCount: jest.fn(),
       createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
       count: jest.fn(),
-      // ... mock implementations for the UserRepository
     } as any;
 
     redisServiceMock = {
@@ -241,7 +240,7 @@ describe('UserService', () => {
 
   describe('UserService - getTotalUsersCount', () => {
     it('should return the total number of users', async () => {
-      userRepositoryMock.count.mockResolvedValue(10); // 假設數據庫有10個用戶
+      userRepositoryMock.count.mockResolvedValue(10);
 
       const count = await userService.getTotalUsersCount();
 
@@ -254,7 +253,7 @@ describe('UserService', () => {
       const plain = 'password123';
       const hashed = 'hashedpassword123';
 
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true); // 假設 bcrypt 認為這個密碼是正確的
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
 
       const result = await userService['verifyPassword'](plain, hashed);
 
@@ -267,7 +266,7 @@ describe('UserService', () => {
       const password = 'password123';
       const hashedPassword = 'hashedpassword123';
 
-      jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashedPassword); // 假設 bcrypt 返回此哈希值
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashedPassword);
 
       const result = await userService['hashPassword'](password);
 

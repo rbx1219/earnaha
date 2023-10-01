@@ -10,7 +10,6 @@ describe('StatisticsService', () => {
     redisServiceMock = {
       getActiveCount: jest.fn(),
       getLastWeekActiveCounts: jest.fn(),
-      // 你可能需要加入其他的mock方法，根據RedisService的使用
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
