@@ -43,7 +43,11 @@ export class RedisListHelper {
 
     while (expired) {
       const firstTimestamp = await this.redisClient.lindex(key, 0);
-      if (firstTimestamp && parseInt(firstTimestamp, 10) < ts - 10 * 60) {
+
+      if (
+        firstTimestamp &&
+        parseInt(firstTimestamp, 10) < ts - 10 * 60 * 1000
+      ) {
         await this.redisClient.lpop(key);
       } else {
         expired = false;
