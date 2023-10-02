@@ -1,0 +1,80 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-webapi-config
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://rbxhome.synology.me"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($request_method = 'OPTIONS') {
+          add_header 'Access-Control-Max-Age' 1728000;
+          add_header 'Content-Type' 'text/plain charset=UTF-8';
+          add_header 'Content-Length' 0;
+          return 204;
+      }
+spec:
+  tls:
+  - hosts:
+    - rbxhome.synology.me
+    secretName: nginx-tls-secret
+  rules:
+  - host: rbxhome.synology.me
+    http:
+      paths:
+      - path: /webapi(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-app
+            port:
+              number: 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-root-config
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  tls:
+  - hosts:
+    - rbxhome.synology.me
+    secretName: nginx-tls-secret
+  rules:
+  - host: rbxhome.synology.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aha-ui
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress-nodeport-service
+  namespace: ingress
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  - name: https
+    port: 443
+    targetPort: 443
+    nodePort: 30443
+  selector:
+    name: nginx-ingress-microk8s
